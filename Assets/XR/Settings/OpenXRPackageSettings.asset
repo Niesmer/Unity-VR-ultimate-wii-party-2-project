@@ -180,6 +180,30 @@ MonoBehaviour:
   company: Unity
   priority: 0
   required: 0
+<<<<<<< Updated upstream
+=======
+--- !u!114 &-5875498690249424022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a75d1f5ff90154ea2a8e58222a1f59, type: 3}
+  m_Name: FoveatedRenderingFeature Standalone
+  m_EditorClassIdentifier: 
+  m_enabled: 0
+  nameUi: Foveated Rendering
+  version: 1
+  featureIdInternal: com.unity.openxr.feature.foveatedrendering
+  openxrExtensionStrings: XR_UNITY_foveation XR_FB_foveation XR_FB_foveation_configuration
+    XR_FB_swapchain_update_state XR_FB_foveation_vulkan XR_META_foveation_eye_tracked
+    XR_META_vulkan_swapchain_create_info
+  company: Unity
+  priority: 0
+  required: 0
 --- !u!114 &-5637133953794644775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,6 +224,7 @@ MonoBehaviour:
   company: 
   priority: 0
   required: 0
+>>>>>>> Stashed changes
 --- !u!114 &-5610887122434713325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -765,6 +790,11 @@ MonoBehaviour:
   - {fileID: 6886245988355559344}
   - {fileID: 6746228182035495572}
   - {fileID: 8877639857907081683}
+<<<<<<< Updated upstream
+  - {fileID: 3204951100740040184}
+=======
+  - {fileID: 3365487605333831198}
+>>>>>>> Stashed changes
   - {fileID: -1991502090188358110}
   - {fileID: -8358487083932745228}
   - {fileID: 8759366741247560425}
@@ -907,6 +937,9 @@ MonoBehaviour:
   m_depthSubmissionMode: 0
   m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
+  m_foveatedRenderingApi: 0
+<<<<<<< Updated upstream
+=======
 --- !u!114 &955536158085469334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -927,6 +960,7 @@ MonoBehaviour:
   company: 
   priority: 0
   required: 0
+>>>>>>> Stashed changes
 --- !u!114 &1070505300935040877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1043,6 +1077,11 @@ MonoBehaviour:
   - {fileID: 4634134690582946360}
   - {fileID: 6710409733205913234}
   - {fileID: -4367189000649784596}
+<<<<<<< Updated upstream
+  - {fileID: -4767592797292468123}
+=======
+  - {fileID: -5875498690249424022}
+>>>>>>> Stashed changes
   - {fileID: 2479393407888986170}
   - {fileID: -5311418557368314572}
   - {fileID: -8602898579829568561}
@@ -1067,6 +1106,9 @@ MonoBehaviour:
   m_depthSubmissionMode: 0
   m_optimizeBufferDiscards: 0
   m_symmetricProjection: 0
+  m_foveatedRenderingApi: 0
+<<<<<<< Updated upstream
+=======
 --- !u!114 &2984663490743087903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1087,6 +1129,7 @@ MonoBehaviour:
   company: 
   priority: 0
   required: 0
+>>>>>>> Stashed changes
 --- !u!114 &3123791108700431558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1128,6 +1171,28 @@ MonoBehaviour:
   priority: 0
   required: 0
 --- !u!114 &3204951100740040184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a75d1f5ff90154ea2a8e58222a1f59, type: 3}
+  m_Name: FoveatedRenderingFeature Android
+  m_EditorClassIdentifier: 
+  m_enabled: 0
+  nameUi: Foveated Rendering
+  version: 1
+  featureIdInternal: com.unity.openxr.feature.foveatedrendering
+  openxrExtensionStrings: XR_UNITY_foveation XR_FB_foveation XR_FB_foveation_configuration
+    XR_FB_swapchain_update_state XR_FB_foveation_vulkan XR_META_foveation_eye_tracked
+    XR_META_vulkan_swapchain_create_info
+  company: Unity
+  priority: 0
+  required: 0
+--- !u!114 &3365487605333831198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
