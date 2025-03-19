@@ -2,7 +2,6 @@
 ; Copyright (C) 1997-2010 Autodesk Inc. and/or its licensors.
 ; All rights reserved.
 ; ----------------------------------------------------
-
 FBXHeaderExtension:  {
 	FBXHeaderVersion: 1003
 	FBXVersion: 7300
