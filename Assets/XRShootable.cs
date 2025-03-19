@@ -9,7 +9,8 @@ public class XRShootable : MonoBehaviour
     {
         if (other.CompareTag("Bullet"))
         {
-            onHit.Invoke();
+            onHit?.Invoke();
+            Destroy(other.gameObject);
         }
     }
 }
