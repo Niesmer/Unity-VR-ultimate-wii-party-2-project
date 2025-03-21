@@ -16,14 +16,16 @@ public class GarmeManagerCarabine : MonoBehaviour
 
     public TMP_Text ScoreText;
 
-    private Transform shooterOriginPos;
+    private Vector3 shooterOriginPos;
+    private Quaternion shooterOriginRot;
     private bool isPlaying = false;
 
     private List<GameObject> instantiatedObjects = new List<GameObject>();
 
     void Start()
     {
-        shooterOriginPos = shooter.transform;
+        shooterOriginPos = shooter.transform.position;
+        shooterOriginRot = shooter.transform.rotation;
     }
 
     void Update()
@@ -55,7 +57,7 @@ public class GarmeManagerCarabine : MonoBehaviour
     void noMoreBaloon()
     {
         // Remove destroyed instances from the list
-        instantiatedObjects.RemoveAll(obj => obj == null);
+        instantiatedObjects.RemoveAll(obj => obj.GetComponent<XRShootable>().destroyed == true);
 
         if (instantiatedObjects.Count == 0 && shooter.bulletCount > 0)
         {
@@ -77,18 +79,20 @@ public class GarmeManagerCarabine : MonoBehaviour
 
     public void Play()
     {
+        isPlaying = true;
+
         if (isPlaying)
         {
             return;
         }
-        isPlaying = true;
-
-        if (shooter.gameObject.activeSelf == false)
+        if (!shooter.gameObject.activeSelf)
         {
             shooter.gameObject.SetActive(true);
-        } else{
-            shooter.transform.position = shooterOriginPos.position;
-            shooter.transform.rotation = shooterOriginPos.rotation;
+        }
+        else
+        {
+            shooter.transform.position = shooterOriginPos;
+            shooter.transform.rotation = shooterOriginRot;
         }
 
         if (shooter.bulletCount <= 0)

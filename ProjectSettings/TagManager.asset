@@ -7,6 +7,9 @@ TagManager:
   - Anchor
   - Bullet
   - Wall
+  - canette
+  - Ball
+  - Can
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,8 @@ using UnityEngine.Events;
 public class XRShootable : MonoBehaviour
 {
     public UnityEvent onHit;
+    [HideInInspector]
+    public bool destroyed;
 
     void OnTriggerEnter(Collider other)
     {
@@ -14,8 +16,11 @@ public class XRShootable : MonoBehaviour
         }
     }
 
-    public void DestroyThisObject(){
+    public void DestroyThisObject()
+    {
         print("destroying object" + gameObject.name);
-        Destroy(gameObject);
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Collider>().enabled = false;
+        destroyed = true;
     }
 }
