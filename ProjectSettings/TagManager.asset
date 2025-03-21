@@ -4,6 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - Anchor
+  - Bullet
+  - Wall
   - canette
   layers:
   - Default
