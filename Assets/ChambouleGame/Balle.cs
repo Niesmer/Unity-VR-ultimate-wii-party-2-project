@@ -1,27 +1,27 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public class Balle : MonoBehaviour
+public class Ball : MonoBehaviour
 {
-    [Header("Paramètres de la balle")]
-    [SerializeField] private float forceLancer = 10f;
-    private bool aEteLancee = false;
+    [Header("Ball Settings")]
+    [SerializeField] private float throwForce = 10f;
+    private bool hasBeenThrown = false;
     private Rigidbody rb;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        if (rb != null)
+        if (rb)
         {
             rb.useGravity = false;
+            rb.constraints = RigidbodyConstraints.None;
         }
     }
 
     private void Update()
     {
-        if (!aEteLancee && rb.linearVelocity.magnitude > 0.1f)
+        if (!hasBeenThrown && rb.linearVelocity.magnitude > 0.1f)
         {
-            aEteLancee = true;
+            hasBeenThrown = true;
             rb.useGravity = true;
         }
     }

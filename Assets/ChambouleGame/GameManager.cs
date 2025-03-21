@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
@@ -9,217 +8,183 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [System.Serializable]
-    public class GameParameters
+    public class GameSettings
     {
-        public Vector3 ballsPositions;
-        public Vector3 towerOfCansPosition;
-
-        public Vector3 fallZonePosition;
-
-        public Vector3 fallZoneScale;
-
-        public Vector3 textPositions;
-
-        public int comboPoints;
+        public Transform ballSpawn;
+        public Transform canTower;
+        public Transform fallZone;
+        public Vector3 fallZoneSize = new Vector3(5f, 1f, 5f);
     }
-    
+
     [System.Serializable]
-    public class BallParameters
+    public class BallSettings
     {
-        [Range(1, 5)] public int balls = 3;
-        public float ballMass = 1f;
-    }
-    
-    [System.Serializable]
-    public class CanParameters
-    {
-        [SerializeField] public int pointsPerCan = 10;
+        [Range(1, 5)] public int count = 3;
+        public float mass = 1f;
     }
 
-    public GameParameters gameParameters;
-    public BallParameters ballParameters;
-    public CanParameters canParameters;
+    [System.Serializable]
+    public class CanSettings
+    {
+        public int pointsPerCan = 10;
+    }
+
+    public GameSettings settings;
+    public BallSettings ballSettings;
+    public CanSettings canSettings;
 
     [SerializeField] private int bonusPoints = 50;
+    [SerializeField] private TMP_Text scoreText;
 
     private int score;
-    private int combo;
-    private int knockDownCount;
-    private int streak;
-    private int maxStreak;
-    private float timeLeft;
-    private bool isGameOver;
-    public TMP_Text scoreText;
-    private Dictionary<int, List<Canette>> knockdownsByBall = new Dictionary<int, List<Canette>>();
-
-
-    private GameObject[] cans;
+    private bool gameInProgress = false;
 
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-        }
         else
-        {
             Destroy(gameObject);
+
+        if (!scoreText)
+        {
+            scoreText = FindObjectOfType<TMP_Text>();
+            if (!scoreText)
+                Debug.LogError("No TMP_Text found for score display!");
         }
     }
 
-    private void Start()
-    {
-        CreateScoreText();
-        CreateTowerOfCans();
-        CreateFallZone();
-        StartCoroutine(SpawnBalls());
-        UpdateScoreText();
-    }
-    
     private void Update()
     {
-    }
-    
-    public void CreateScoreText()
-    {
-        if (scoreText == null)
+        if (gameInProgress && GameObject.FindGameObjectsWithTag("Ball").Length == 0)
         {
-            Debug.LogError("scoreText object not found in the scene!");
+            EndGame();
+        }
+    }
+
+    public void StartGame()
+    {
+        if (gameInProgress)
+        {
+            Debug.Log("Une partie est déjà en cours !");
             return;
         }
 
-        scoreText.fontSize = 24;
-        scoreText.color = Color.white;
-        scoreText.text = "Score: 0";  
+        Debug.Log("Démarrage de la partie !");
+        gameInProgress = true;
+
+        score = 0;
+        UpdateScoreText();
+        ClearPreviousGame();
+        SpawnCanTower();
+        CreateFallZone();
+        StartCoroutine(SpawnBalls());
     }
-    
+
+    private void EndGame()
+    {
+        Debug.Log("Partie terminée !");
+        gameInProgress = false; // Permet de relancer une partie
+    }
+
+    private void ClearPreviousGame()
+    {
+        foreach (GameObject ball in GameObject.FindGameObjectsWithTag("Ball"))
+        {
+            Destroy(ball);
+        }
+
+        foreach (GameObject can in GameObject.FindGameObjectsWithTag("Can"))
+        {
+            Destroy(can);
+        }
+    }
+
     private void UpdateScoreText()
     {
-        if (scoreText != null)
-        {
-            scoreText.text = "Score: " + score.ToString();  
-        }
-        else
-        {
-            Debug.LogError("ScoreText is not initialized!");
-        }
+        if (scoreText)
+            scoreText.text = "Score: " + score;
     }
 
-    public int GetPointsPerCan()
-    {
-        return canParameters.pointsPerCan;
-    }
-
-    public int GetNumberOfBalls()
-    {
-        return ballParameters.balls;
-    }
-
-    public int GetNewBallID()
-    {
-        return knockdownsByBall.Count;
-    }
-
-    public void RegisterKnockDown(int ballID, Canette canette)
-    {
-        if (!knockdownsByBall.ContainsKey(ballID))
-        {
-            knockdownsByBall[ballID] = new List<Canette>();
-        }
-        knockdownsByBall[ballID].Add(canette);
-    }
-
-    public float GetBallMass()
-    {
-        return ballParameters.ballMass;
-    }
+    public int GetPointsPerCan() => canSettings.pointsPerCan;
+    public int GetBallCount() => ballSettings.count;
+    public float GetBallMass() => ballSettings.mass;
 
     private void CreateFallZone()
     {
-        GameObject fallZoneObject = new GameObject("FallZone");
-        fallZoneObject.transform.position = gameParameters.towerOfCansPosition - new Vector3(0, 1f, 0);
-        BoxCollider boxCollider = fallZoneObject.AddComponent<BoxCollider>();
-        boxCollider.isTrigger = true;
-        boxCollider.size = gameParameters.fallZoneScale;
-        fallZoneObject.AddComponent<FallZone>();
+        GameObject fallZoneObj = new GameObject("FallZone");
+        fallZoneObj.transform.position = settings.fallZone.position;
+        
+        BoxCollider collider = fallZoneObj.AddComponent<BoxCollider>();
+        collider.isTrigger = true;
+        
+        fallZoneObj.transform.localScale = settings.fallZoneSize;
+
+        fallZoneObj.AddComponent<FallZone>();
     }
 
-    private void CreateTowerOfCans()
+    private void SpawnCanTower()
     {
-        GameObject canettePrefab = Resources.Load<GameObject>("Canette");
-
-        if (canettePrefab == null)
+        GameObject canPrefab = Resources.Load<GameObject>("Can");
+        if (!canPrefab)
         {
-            Debug.LogError("Le prefab de la canette n'a pas été trouvé dans les ressources.");
+            Debug.LogError("Can prefab not found!");
             return;
         }
 
-        GameObject towerOfCans = new GameObject("towerOfCans");
-        towerOfCans.transform.position = gameParameters.towerOfCansPosition; 
+        GameObject tower = new GameObject("CanTower");
+        tower.transform.position = settings.canTower.position;
 
-        float canSpacing = 0.17f;
-        int[] cansInRows = { 4, 3, 2, 1 };
+        float spacing = 0.17f;
+        int[] rows = { 4, 3, 2, 1 };
 
-        for (int row = 0; row < cansInRows.Length; row++)
+        for (int row = 0; row < rows.Length; row++)
         {
-            int cansInRow = cansInRows[row];
-            float offsetX = (cansInRow - 1) * canSpacing / 2f;
+            float offsetZ = (rows[row] - 1) * spacing / 2f;
+            float posY = settings.canTower.position.y + row * spacing;
 
-            float posY = gameParameters.towerOfCansPosition.y + row * canSpacing;
-
-            for (int i = 0; i < cansInRow; i++)
+            for (int i = 0; i < rows[row]; i++)
             {
-                float posX = gameParameters.towerOfCansPosition.x - offsetX + i * canSpacing;
+                float posZ = settings.canTower.position.z - offsetZ + i * spacing;
+                Vector3 pos = new Vector3(settings.canTower.position.x, posY, posZ);
 
-                Vector3 canPosition = new Vector3(posX, posY, gameParameters.towerOfCansPosition.z);
-
-                GameObject can = Instantiate(canettePrefab, canPosition, Quaternion.identity);
-
-                can.transform.SetParent(towerOfCans.transform);
+                GameObject can = Instantiate(canPrefab, pos, Quaternion.identity);
+                can.transform.SetParent(tower.transform);
             }
         }
     }
 
-    private IEnumerator SpawnBalls(){
-        GameObject ballPrefab = Resources.Load<GameObject>("ball");
-
-        if (ballPrefab == null)
+    private IEnumerator SpawnBalls()
+    {
+        GameObject ballPrefab = Resources.Load<GameObject>("Ball");
+        if (!ballPrefab)
         {
-            Debug.LogError("Le prefab de la balle n'a pas été trouvé dans les ressources.");
+            Debug.LogError("Ball prefab not found!");
             yield break;
         }
 
-        for (int i = 0; i < ballParameters.balls; i++)
+        for (int i = 0; i < ballSettings.count; i++)
         {
-            float randomOffsetX = Random.Range(-0.05f, 0.05f); 
-            float randomOffsetZ = Random.Range(-0.05f, 0.05f);
+            float offsetX = Random.Range(-0.05f, 0.05f);
+            float offsetZ = Random.Range(-0.05f, 0.05f);
+            Vector3 spawnPos = settings.ballSpawn.position + new Vector3(offsetX, 0, offsetZ);
 
-            Vector3 spawnPosition = gameParameters.ballsPositions + new Vector3(randomOffsetX, 0, randomOffsetZ);
+            GameObject newBall = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
+            Rigidbody ballRb = newBall.GetComponent<Rigidbody>();
 
-            Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
+            if (ballRb)
+            {
+                ballRb.useGravity = true;
+                ballRb.linearVelocity = Vector3.zero;
+            }
 
             yield return new WaitForSeconds(0.25f);
         }
     }
 
-    public void addScore(int points)
+    public void AddScore(int points)
     {
         score += points;
         UpdateScoreText();
-    }
-
-    private void CheckGameOver()
-    {
-        // Check if the game is over when the balls are out
-    }
-
-    private void EndGame()
-    {
-        // Handle end of the game (score, etc.)
-    }
-
-    private void ApplyTimePenalty()
-    {
-        // Apply time penalty if needed
     }
 }

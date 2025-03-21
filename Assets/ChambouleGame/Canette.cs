@@ -1,40 +1,37 @@
 using UnityEngine;
 using System.Collections;
 
-public class Canette : MonoBehaviour
+public class Can : MonoBehaviour
 {
-    [Header("Paramètres physiques de la Canette")]
-    [SerializeField] private float mass = 1f;
-    [SerializeField] private Vector3 canetteSize = new Vector3(0.12f, 0.07f, 0.12f);
+    [Header("Can Properties")]
+    [SerializeField] private float weight = 1f;
+    [SerializeField] private Vector3 size = new Vector3(0.12f, 0.07f, 0.12f);
 
-    private bool isKnockedDown = false;
+    private bool isDown = false;
     private Rigidbody rb;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.mass = mass;
-        }
-        transform.localScale = canetteSize;
+        if (rb)
+            rb.mass = weight;
+
+        transform.localScale = size;
     }
 
-    public void KnockDown()
+    public void Fall()
     {
-        if (!isKnockedDown)
-        {
-            isKnockedDown = true;
-            Debug.Log("Canette tombée!");
+        if (isDown) return;
 
-            int pointsPerCan = GameManager.Instance.GetPointsPerCan();
-            GameManager.Instance.addScore(pointsPerCan);
+        isDown = true;
+        Debug.Log("Can fell!");
 
-            StartCoroutine(DestroyCanetteAfterDelay(3f));
-        }
+        GameManager.Instance.AddScore(GameManager.Instance.GetPointsPerCan());
+
+        StartCoroutine(DestroyAfterDelay(3f));
     }
 
-    private IEnumerator DestroyCanetteAfterDelay(float delay)
+    private IEnumerator DestroyAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         Destroy(gameObject);

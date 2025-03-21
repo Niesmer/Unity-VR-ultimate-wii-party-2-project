@@ -4,9 +4,10 @@ public class FallZone : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Canette canette = other.GetComponent<Canette>();
-        if (canette != null){
-            canette.KnockDown();
+        Can canette = other.GetComponent<Can>();
+        if (canette != null)
+        {
+            canette.Fall();
         }
     }
 }
