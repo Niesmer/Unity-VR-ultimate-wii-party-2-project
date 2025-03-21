@@ -6,10 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Floor/Floor.unity
+    guid: b985931f99a1cf84393cd56044156a21
+  - enabled: 0
+    path: Assets/Scenes/Escalade/Escalade.unity
+    guid: 35b5e12297ea71a4d9eceb65e95228bc
+  - enabled: 0
+    path: Assets/Scenes/Carabine/Carabine.unity
+    guid: 0107280dfb1f7244eb45fdfaa86def53
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 55daccc09a3b69647bbab145b54a3ab3
+  - enabled: 0
+    path: Assets/Samples/XR Interaction Toolkit/3.0.7/Starter Assets/DemoScene.unity
+    guid: 319dafa5c80f29f428dc1e0d03f04177
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
+    Unity.XR.PXR.Settings: {fileID: 11400000, guid: df92d14142dd1be42a32b460f3bfd5ff, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 9bec1ce6a03ccba4b9a8215241b32e63, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: a49cadc1a815591479693b955ccf08c1, type: 2}

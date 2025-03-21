@@ -7,11 +7,14 @@ public class Timer : MonoBehaviour
     public float timeRemaining = 10f;
     public bool timerIsRunning = false;
     public bool isCountDown = true;
+
+    private float originalTIme;
     public List<TMP_Text> timeTexts;
 
     void Start()
     {
         DisplayTime(timeRemaining);
+        originalTIme = timeRemaining;
     }
 
     void Update()
@@ -46,14 +49,19 @@ public class Timer : MonoBehaviour
         timerIsRunning = true;
     }
 
+    public int GetTime()
+    {
+        return (int)timeRemaining;
+    }
+
     public void StopTimer()
     {
         timerIsRunning = false;
     }
 
-    public void ResetTimer(float newTime)
+    public void ResetTimer()
     {
-        timeRemaining = newTime;
+        timeRemaining = originalTIme;
         DisplayTime(timeRemaining);
     }
 

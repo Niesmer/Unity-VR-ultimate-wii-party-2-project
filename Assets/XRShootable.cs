@@ -13,4 +13,9 @@ public class XRShootable : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
+
+    public void DestroyThisObject(){
+        print("destroying object" + gameObject.name);
+        Destroy(gameObject);
+    }
 }
